@@ -6,48 +6,48 @@ const searchForm = document.querySelector("#search-form");
 const searchInput = document.querySelector("#search-input");
 const todayContainer = document.querySelector("#today");
 const forecastContainer = document.querySelector("#forecast");
-const weatherHistory = document.querySelector("#weatherHistory");
+const weatherHistoryContainer = document.querySelector("#weather-history");
 
 const fetchWeather = (location) => {
 
-}
+};
 
     const createSearchHistory = () => {
-        // Clear the container content using jQuery
-        $('#weatherHistoryContainer').empty();
+    //     // Clear the container content using jQuery
+    //     $('#weatherHistoryContainer').empty();
     
-        // Iterate through the search history array and create buttons
-        $.each(searchHistoryForWeather, (index, searchTerm) => {
-            // Create a new button element
-            const $buttonEl = $('<button>', {
-                type: 'button',
-                class: 'btn btn-secondary history-button',
-                'aria-controls': 'today forecast',
-                'data-search': searchTerm,
-                text: searchTerm
-            });
+    //     // Iterate through the search history array and create buttons
+    //     $.each(searchHistoryForWeather, (index, searchTerm) => {
+    //         // Create a new button element
+    //         const $buttonEl = $('<button>', {
+    //             type: 'button',
+    //             class: 'btn btn-secondary history-button',
+    //             'aria-controls': 'today forecast',
+    //             'data-search': searchTerm,
+    //             text: searchTerm
+    //         });
     
-            $('#weatherHistoryContainer').append($buttonEl);
-        });
-    };
+    //         $('#weatherHistoryContainer').append($buttonEl);
+    //     });
+    // };
 
-    //     weatherHistoryContainer.innerHTML = "";
-//     searchHistoryForWeather.forEach(searchHistoryForWeather => {
-//         const buttonEl = document.createElement("button");
-//         buttonEl.setAttribute("type", "button");
-//         buttonEl.setAttribute("class", "btn btn-secondary");
-//         buttonEl.setAttribute("aria-controls", "today forecast");
-//         buttonEl.classList.add("history-button");
-//         buttonEl.setAttribute("data-search", searchHistoryForWeather);
-//         buttonEl.textContent = searchHistoryForWeather;
-//         weatherHistoryContainer.append(buttonEl);
-//     });
+        weatherHistoryContainer.innerHTML = "";
+        searchHistoryForWeather.forEach(searchHistoryForWeather => {
+        const buttonEl = document.createElement("button");
+        buttonEl.setAttribute("id", "city-button");
+        buttonEl.setAttribute("class", "btn btn-secondary");
+        buttonEl.setAttribute("aria-controls", "today forecast");
+        buttonEl.classList.add("history-button");
+        buttonEl.setAttribute("data-search", searchHistoryForWeather);
+        buttonEl.textContent = searchHistoryForWeather;
+        weatherHistoryContainer.append(buttonEl);
+    });
     
-// }
+};
 
 const appendWeatherHistory = (search) =>{
     if(searchHistoryForWeather.includes(search)) {
-        return;
+        return searchHistoryForWeather;
     }
     searchHistoryForWeather.push(search);
     localStorage.setItem('weatherHistory', JSON.stringify(searchHistoryForWeather));
@@ -63,8 +63,10 @@ function fetchCoordinates(search) {
     
     const url = `${weatherAPIBaseURL}/geo/1.0/direct?q=${search}&appid=${weatherAPIKey}`  
     fetch(url)
-    .then(function(response) {
-        return response.json();
+        .then(function(response) {
+            // console.log(response.json())
+            return response.json()
+        // return JSON.parse(response);
     }).then(function(data) {
 
         if(!data[0]) {
@@ -90,4 +92,16 @@ const handleSearchFormSubmit = (event) => {
     searchInput.value = "";
 }
 
-// searchForm.addEventListener("submit", handleSearchFormSubmit);
+const initializeSearchHistory = () => {
+    const storedWeatherHistory = JSON.parse(localStorage.getItem("weatherHistory"));
+    if(storedWeatherHistory) {
+        searchHistoryForWeather = storedWeatherHistory;
+    }
+    createSearchHistory();
+}
+
+
+initializeSearchHistory();
+
+searchForm.addEventListener("submit", handleSearchFormSubmit);
+
