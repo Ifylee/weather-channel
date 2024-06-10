@@ -1,6 +1,6 @@
 let searchHistoryForWeather = [];
 const weatherAPIBaseURL = "https://api.openweathermap.org";
-const weatherAPIKey = "479a66df12dc94804e1da449832ed7a9";
+const weatherAPIKey = "3191bbb5bba0d2fbfd147dad7dd75f0b";
 
 const searchForm = document.querySelector("#search-form");
 const searchInput = document.querySelector("#search-input");
@@ -12,13 +12,47 @@ const fetchWeather = (location) => {
 
 }
 
+    const createSearchHistory = () => {
+        // Clear the container content using jQuery
+        $('#weatherHistoryContainer').empty();
+    
+        // Iterate through the search history array and create buttons
+        $.each(searchHistoryForWeather, (index, searchTerm) => {
+            // Create a new button element
+            const $buttonEl = $('<button>', {
+                type: 'button',
+                class: 'btn btn-secondary history-button',
+                'aria-controls': 'today forecast',
+                'data-search': searchTerm,
+                text: searchTerm
+            });
+    
+            $('#weatherHistoryContainer').append($buttonEl);
+        });
+    };
+
+    //     weatherHistoryContainer.innerHTML = "";
+//     searchHistoryForWeather.forEach(searchHistoryForWeather => {
+//         const buttonEl = document.createElement("button");
+//         buttonEl.setAttribute("type", "button");
+//         buttonEl.setAttribute("class", "btn btn-secondary");
+//         buttonEl.setAttribute("aria-controls", "today forecast");
+//         buttonEl.classList.add("history-button");
+//         buttonEl.setAttribute("data-search", searchHistoryForWeather);
+//         buttonEl.textContent = searchHistoryForWeather;
+//         weatherHistoryContainer.append(buttonEl);
+//     });
+    
+// }
+
 const appendWeatherHistory = (search) =>{
-    if(searchHistoryForWeather.indexOf(search) === -1) {
+    if(searchHistoryForWeather.includes(search)) {
         return;
     }
     searchHistoryForWeather.push(search);
     localStorage.setItem('weatherHistory', JSON.stringify(searchHistoryForWeather));
-}
+    createSearchHistory();
+};
 
 function fetchCoordinates(search) {
     // console.log("fetchCoordinates", search);
@@ -55,6 +89,5 @@ const handleSearchFormSubmit = (event) => {
 
     searchInput.value = "";
 }
-
 
 // searchForm.addEventListener("submit", handleSearchFormSubmit);
