@@ -8,8 +8,22 @@ const todayContainer = document.querySelector("#today");
 const forecastContainer = document.querySelector("#forecast");
 const weatherHistory = document.querySelector("#weatherHistory");
 
-function fetchCoordinates = (search) => {
-    console.log("fetchCoordinates", search);
+function fetchCoordinates(search) {
+    // console.log("fetchCoordinates", search);
+    // a. url -> endpoint
+    // b. parameters -> query string
+    // c. fetch -> GET
+
+    
+    const url = `${weatherAPIBaseURL}/geo/1.0/direct?q=${search}&appid=${weatherAPIKey}`  
+    fetch(url)
+    .then(function(response) {
+        return response.json();
+    }).then(function(data) {
+        const latitude = data[0].lat;
+        const longitude = data[0].lon;
+        console.log(data, latitude, longitude);
+    })
 }
 
 const handleSearchFormSubmit = (event) => {
@@ -24,4 +38,4 @@ const handleSearchFormSubmit = (event) => {
 }
 
 
-searchForm.addEventListener("submit", handleSearchFormSubmit);
+// searchForm.addEventListener("submit", handleSearchFormSubmit);
