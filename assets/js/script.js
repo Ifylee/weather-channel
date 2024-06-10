@@ -9,28 +9,17 @@ const forecastContainer = document.querySelector("#forecast");
 const weatherHistoryContainer = document.querySelector("#weather-history");
 
 const fetchWeather = (location) => {
+    const latitude = location.lat;
+    const longitude = location.lon;
 
+    const city = location.name;
+    // https://api.openweathermap.org/data/2.5/forecast?lat={lat}&lon={lon}&appid={API key}
+    const apiURL = `${weatherAPIBaseURL}/data/2.5/forecast?lat=${latitude}&lon=${longitude}&appid=${weatherAPIKey}`
+    console.log(apiURL);
 };
 
     const createSearchHistory = () => {
-    //     // Clear the container content using jQuery
-    //     $('#weatherHistoryContainer').empty();
     
-    //     // Iterate through the search history array and create buttons
-    //     $.each(searchHistoryForWeather, (index, searchTerm) => {
-    //         // Create a new button element
-    //         const $buttonEl = $('<button>', {
-    //             type: 'button',
-    //             class: 'btn btn-secondary history-button',
-    //             'aria-controls': 'today forecast',
-    //             'data-search': searchTerm,
-    //             text: searchTerm
-    //         });
-    
-    //         $('#weatherHistoryContainer').append($buttonEl);
-    //     });
-    // };
-
         weatherHistoryContainer.innerHTML = "";
         searchHistoryForWeather.forEach(searchHistoryForWeather => {
         const buttonEl = document.createElement("button");
@@ -61,7 +50,7 @@ function fetchCoordinates(search) {
     // c. fetch -> GET
 
     
-    const url = `${weatherAPIBaseURL}/geo/1.0/direct?q=${search}&appid=${weatherAPIKey}`  
+    const url = `${weatherAPIBaseURL}/geo/1.0/direct?q=${search}&units=imperial&appid=${weatherAPIKey}`  
     fetch(url)
         .then(function(response) {
             // console.log(response.json())
@@ -100,8 +89,20 @@ const initializeSearchHistory = () => {
     createSearchHistory();
 }
 
+const handleSearchHistoryClick = (event) => {
+    console.log(event.target)
+    if (!event.target.matches(".history-button")) {
+        return;
+    }
+    const buttonEl = event.target;
+
+    const search = buttonEl.getAttribute("data-search");
+   
+
+}
 
 initializeSearchHistory();
 
 searchForm.addEventListener("submit", handleSearchFormSubmit);
 
+weatherHistoryContainer.addEventListener("click", handleSearchHistoryClick);
