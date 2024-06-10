@@ -7,3 +7,21 @@ const searchInput = document.querySelector("#search-input");
 const todayContainer = document.querySelector("#today");
 const forecastContainer = document.querySelector("#forecast");
 const weatherHistory = document.querySelector("#weatherHistory");
+
+function fetchCoordinates = (search) => {
+    console.log("fetchCoordinates", search);
+}
+
+const handleSearchFormSubmit = (event) => {
+    event.preventDefault();
+    
+    const search = searchInput.value.trim();
+    if(search) {
+        fetchCoordinates(search);
+    }
+
+    searchInput.value = "";
+}
+
+
+searchForm.addEventListener("submit", handleSearchFormSubmit);
