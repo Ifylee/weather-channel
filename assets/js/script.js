@@ -8,6 +8,18 @@ const todayContainer = document.querySelector("#today");
 const forecastContainer = document.querySelector("#forecast");
 const weatherHistory = document.querySelector("#weatherHistory");
 
+const fetchWeather = (location) => {
+
+}
+
+const appendWeatherHistory = (search) =>{
+    if(searchHistoryForWeather.indexOf(search) === -1) {
+        return;
+    }
+    searchHistoryForWeather.push(search);
+    localStorage.setItem('weatherHistory', JSON.stringify(searchHistoryForWeather));
+}
+
 function fetchCoordinates(search) {
     // console.log("fetchCoordinates", search);
     // a. url -> endpoint
@@ -20,10 +32,17 @@ function fetchCoordinates(search) {
     .then(function(response) {
         return response.json();
     }).then(function(data) {
-        const latitude = data[0].lat;
-        const longitude = data[0].lon;
-        console.log(data, latitude, longitude);
-    })
+
+        if(!data[0]) {
+            alert("City not found");
+        } else {
+            console.log(data);
+            appendWeatherHistory(search);
+            fetchWeather(data[0]);
+        }
+    }).catch(function(error) {
+        console.log(error);
+    });
 }
 
 const handleSearchFormSubmit = (event) => {
