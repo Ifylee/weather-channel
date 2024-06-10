@@ -8,14 +8,53 @@ const todayContainer = document.querySelector("#today");
 const forecastContainer = document.querySelector("#forecast");
 const weatherHistoryContainer = document.querySelector("#weather-history");
 
+
+const displayCurrentWeather = (city, weatherData) => {
+    const date = dayjs().format("M/D/YYYY");
+    const tempF = weatherData.main.temp;
+    const windMph = weatherData.wind.speed;
+    const iconURL = `https://openweathermap.org/img/w/${weatherData.weather[0].icon}.png`;
+    const iconDescription = weatherData.weather[0].description || "No Description";
+
+    const card = document.createElement("div");
+    const cardBody = document.createElement("div");
+    const heading = document.createElement("h3");
+    const weatherIcon = document.createElement("img");
+    const temperatureElement = document.createElement("p");
+    const windElement = document.createElement("p");
+    const humidityElement = document.createElement("p");
+
+    card.setAttribute("class", "card");
+    cardBody.setAttribute("class", "card-body");
+    card.append(cardBody);
+
+    heading.setAttribute("class", "h3 card-title");
+    temperatureElement.setAttribute("class", "card-text");
+    windElement.setAttribute("class", "card-text");
+    humidityElement.setAttribute("class", "card-text");
+
+    heading.textContent = `${city} (${date})`;
+}
+
+
+
 const fetchWeather = (location) => {
     const latitude = location.lat;
     const longitude = location.lon;
 
     const city = location.name;
-    // https://api.openweathermap.org/data/2.5/forecast?lat={lat}&lon={lon}&appid={API key}
-    const apiURL = `${weatherAPIBaseURL}/data/2.5/forecast?lat=${latitude}&lon=${longitude}&appid=${weatherAPIKey}`
-    console.log(apiURL);
+    
+    const apiURL = `${weatherAPIBaseURL}/data/2.5/forecast?lat=${latitude}&lon=${longitude}&units=imperial&appid=${weatherAPIKey}`
+   
+    fetch(apiURL).then(function(response) {
+        return response.json();
+    }).then(function(data) {
+        console.log(data);
+        displayCurrentWeather(city, data.list[0]);
+        //  displayForecast(data);
+    }).catch(function(error) {
+        console.log(error);
+    });
 };
 
     const createSearchHistory = () => {
@@ -50,7 +89,7 @@ function fetchCoordinates(search) {
     // c. fetch -> GET
 
     
-    const url = `${weatherAPIBaseURL}/geo/1.0/direct?q=${search}&units=imperial&appid=${weatherAPIKey}`  
+    const url = `${weatherAPIBaseURL}/geo/1.0/direct?q=${search}&appid=${weatherAPIKey}`  
     fetch(url)
         .then(function(response) {
             // console.log(response.json())
@@ -97,6 +136,7 @@ const handleSearchHistoryClick = (event) => {
     const buttonEl = event.target;
 
     const search = buttonEl.getAttribute("data-search");
+    fetchCoordinates(search);
    
 
 }
