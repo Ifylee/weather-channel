@@ -13,7 +13,7 @@ const displayCurrentWeather = (city, weatherData) => {
     const date = dayjs().format("M/D/YYYY");
     const tempF = weatherData.main.temp;
     const windMph = weatherData.wind.speed;
-    const iconURL = `https://openweathermap.org/img/w/${weatherData.weather[0].icon}.png`;
+    const iconUrl = `https://openweathermap.org/img/w/${weatherData.weather[0].icon}.png`;
     const iconDescription = weatherData.weather[0].description || "No Description";
 
     const card = document.createElement("div");
@@ -34,6 +34,12 @@ const displayCurrentWeather = (city, weatherData) => {
     humidityElement.setAttribute("class", "card-text");
 
     heading.textContent = `${city} (${date})`;
+    weatherIcon.setAttribute("src", iconUrl);
+    heading.append(weatherIcon);
+    temperatureElement.textContent = `Temperature: ${tempF} F`;
+    windElement.textContent = `Wind: ${windMph} MPH`;
+    humidityElement.textContent = `Humidity: ${weatherData.main.humidity}`
+
 }
 
 
