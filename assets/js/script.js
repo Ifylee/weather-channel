@@ -13,8 +13,10 @@ const displayCurrentWeather = (city, weatherData) => {
     const date = dayjs().format("M/D/YYYY");
     const tempF = weatherData.main.temp;
     const windMph = weatherData.wind.speed;
+    const humidity = weatherData.main.humidity;
     const iconUrl = `https://openweathermap.org/img/w/${weatherData.weather[0].icon}.png`;
     const iconDescription = weatherData.weather[0].description || "No Description";
+  
 
     const card = document.createElement("div");
     const cardBody = document.createElement("div");
@@ -35,10 +37,16 @@ const displayCurrentWeather = (city, weatherData) => {
 
     heading.textContent = `${city} (${date})`;
     weatherIcon.setAttribute("src", iconUrl);
+    weatherIcon.setAttribute("alt", iconDescription);
     heading.append(weatherIcon);
     temperatureElement.textContent = `Temperature: ${tempF} F`;
     windElement.textContent = `Wind: ${windMph} MPH`;
-    humidityElement.textContent = `Humidity: ${weatherData.main.humidity}`
+    humidityElement.textContent = `Humidity: ${humidity} %`;
+    cardBody.append(heading, temperatureElement, windElement, humidityElement);
+
+
+    todayContainer.innerHTML = "";
+    todayContainer.append(card);
 
 }
 
@@ -132,7 +140,7 @@ const initializeSearchHistory = () => {
         searchHistoryForWeather = storedWeatherHistory;
     }
     createSearchHistory();
-}
+};
 
 const handleSearchHistoryClick = (event) => {
     console.log(event.target)
@@ -145,7 +153,7 @@ const handleSearchHistoryClick = (event) => {
     fetchCoordinates(search);
    
 
-}
+};
 
 initializeSearchHistory();
 
