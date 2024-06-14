@@ -39,7 +39,7 @@ const displayCurrentWeather = (city, weatherData) => {
     weatherIcon.setAttribute("src", iconUrl);
     weatherIcon.setAttribute("alt", iconDescription);
     heading.append(weatherIcon);
-    temperatureElement.textContent = `Temperature: ${tempF} F`;
+    temperatureElement.textContent = `Temperature : ${tempF} F`;
     windElement.textContent = `Wind: ${windMph} MPH`;
     humidityElement.textContent = `Humidity: ${humidity} %`;
     cardBody.append(heading, temperatureElement, windElement, humidityElement);
@@ -79,6 +79,14 @@ const createForecastCard = (forecastData) => {
     windElement.setAttribute("class", "card-text");
     humidityElement.setAttribute("class", "card-text");
 
+    cardTitle.textContent = dayjs(forecastData.dt_txt).format("M/D/YYYY");
+    weatherIcon.setAttribute("src", iconUrl);
+    weatherIcon.setAttribute("alt", iconDescription);
+    temperatureElement.textContent = `Temp: ${temperature} °F`;
+    windElement.textContent = `wind: ${wind} MPH`;
+    humidityElement.textContent = `Humidity: ${humidity} %`;
+
+    forecastContainer.append(column);
 }
 
 const displayForecast = (weatherData) => {
@@ -99,7 +107,7 @@ const displayForecast = (weatherData) => {
             if(weatherData[i].dt_txt.slice(11,13)=== "12") {
 
 
-             create forecastCard(weatherData[i]);   
+             createForecastCard(weatherData[i]);   
             }
         }
     }
