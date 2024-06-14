@@ -26,7 +26,7 @@ const displayCurrentWeather = (city, weatherData) => {
     const windElement = document.createElement("p");
     const humidityElement = document.createElement("p");
 
-    card.setAttribute("class", "card");
+    card.setAttribute("class", "card bg-dark border-primary text-white mb-3");
     cardBody.setAttribute("class", "card-body");
     card.append(cardBody);
 
@@ -50,7 +50,60 @@ const displayCurrentWeather = (city, weatherData) => {
 
 }
 
+const createForecastCard = (forecastData) => {
+    const iconUrl = `https://openweathermap.org/img/w/${weatherData.weather[0].icon}.png`;
+    const iconDescription = forecastData.weather[0].description || "No description";
+    const temperature = forecastData.main.temp;
+    const wind = forecastData.wind.speed;
+    const humidity = forecastData.main.humidity;
 
+    const column = document.createElement("div");
+    const card = document.createElement("div");
+    const cardBody = document.createElement("div");
+    const cardTitle = document.createElement("h5");
+    const weatherIcon = document.createElement("img");
+    const temperatureElement = document.createElement("p");
+    const windElement = document.createElement("p");
+    const humidityElement = document.createElement("p");
+
+    column.append(card);
+    card.append(cardBody);
+    cardBody.append(cardTitle, weatherIcon, temperatureElement, windElement, humidityElement);
+
+    column.setAttribute("class", "col-md");
+    column.classList.add("five-day-card");
+    card.setAttribute("class", "card bg-primary text-white");
+    cardBody.setAttribute("class", "card-body");
+    cardTitle.setAttribute("class", "card-title");
+    temperatureElement.setAttribute("class", "card-text");
+    windElement.setAttribute("class", "card-text");
+    humidityElement.setAttribute("class", "card-text");
+
+}
+
+const displayForecast = (weatherData) => {
+    const startDate = dayjs().add(1, "day").startOf("day").unix();
+    const endDate = dayjs().add(6, "day").startOf("day").unix(); 
+
+    const headingColumn = document.createElement("div");
+    const heading = document.createElement("h3");
+    headingColumn.setAttribute("class", "col-12");
+    heading.textContent = "5-Day Forecast:";
+    headingColumn.append(heading);
+
+    forecastContainer.innerHTML = "";
+    forecastContainer.append(headingColumn);
+
+    for(let i = 0; i < weatherData.length; i++) {
+        if(weatherData[i].dt >= startDate && weatherData[i].dt < endDate ) {
+            if(weatherData[i].dt_txt.slice(11,13)=== "12") {
+
+
+             create forecastCard(weatherData[i]);   
+            }
+        }
+    }
+}
 
 const fetchWeather = (location) => {
     const latitude = location.lat;
@@ -65,7 +118,7 @@ const fetchWeather = (location) => {
     }).then(function(data) {
         console.log(data);
         displayCurrentWeather(city, data.list[0]);
-        //  displayForecast(data);
+        displayForecast(data.list);
     }).catch(function(error) {
         console.log(error);
     });
