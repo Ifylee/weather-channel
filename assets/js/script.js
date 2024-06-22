@@ -39,7 +39,7 @@ const displayCurrentWeather = (city, weatherData) => {
     weatherIcon.setAttribute("src", iconUrl);
     weatherIcon.setAttribute("alt", iconDescription);
     heading.append(weatherIcon);
-    temperatureElement.textContent = `Temperature : ${tempF} F`;
+    temperatureElement.textContent = `Temperature : ${tempF} °F`;
     windElement.textContent = `Wind: ${windMph} MPH`;
     humidityElement.textContent = `Humidity: ${humidity} %`;
     cardBody.append(heading, temperatureElement, windElement, humidityElement);
@@ -51,7 +51,7 @@ const displayCurrentWeather = (city, weatherData) => {
 }
 
 const createForecastCard = (forecastData) => {
-    const iconUrl = `https://openweathermap.org/img/w/${weatherData.weather[0].icon}.png`;
+    const iconUrl = `https://openweathermap.org/img/w/${forecastData.weather[0].icon}.png`;
     const iconDescription = forecastData.weather[0].description || "No description";
     const temperature = forecastData.main.temp;
     const wind = forecastData.wind.speed;
@@ -82,9 +82,9 @@ const createForecastCard = (forecastData) => {
     cardTitle.textContent = dayjs(forecastData.dt_txt).format("M/D/YYYY");
     weatherIcon.setAttribute("src", iconUrl);
     weatherIcon.setAttribute("alt", iconDescription);
-    temperatureElement.textContent = `Temp: ${temperature} °F`;
-    windElement.textContent = `wind: ${wind} MPH`;
-    humidityElement.textContent = `Humidity: ${humidity} %`;
+    temperatureElement.textContent = `Temperature🌡️: ${temperature} °F`;
+    windElement.textContent = `wind༄: ${wind} MPH`;
+    humidityElement.textContent = `Humidity💦: ${humidity} %`;
 
     forecastContainer.append(column);
 }
@@ -119,7 +119,7 @@ const fetchWeather = (location) => {
 
     const city = location.name;
     
-    const apiURL = `${weatherAPIBaseURL}/data/2.5/forecast?lat=${latitude}&lon=${longitude}&units=imperial&appid=${weatherAPIKey}`
+    const apiURL = `${weatherAPIBaseURL}/data/2.5/forecast?lat=${latitude}&lon=${longitude}&units=imperial&appid=${weatherAPIKey}`;
    
     fetch(apiURL).then(function(response) {
         return response.json();
@@ -134,17 +134,20 @@ const fetchWeather = (location) => {
 
     const createSearchHistory = () => {
     
-        weatherHistoryContainer.innerHTML = "";
-        searchHistoryForWeather.forEach(searchHistoryForWeather => {
+    weatherHistoryContainer.innerHTML = "";
+    for(let i = 0; i < searchHistoryForWeather.length; i++) {
+        // searchHistoryForWeather.forEach(searchHistoryForWeather => {
         const buttonEl = document.createElement("button");
+        buttonEl.setAttribute("type", "button");
         buttonEl.setAttribute("id", "city-button");
         buttonEl.setAttribute("class", "btn btn-secondary");
         buttonEl.setAttribute("aria-controls", "today forecast");
         buttonEl.classList.add("history-button");
-        buttonEl.setAttribute("data-search", searchHistoryForWeather);
-        buttonEl.textContent = searchHistoryForWeather;
+        buttonEl.setAttribute("data-search", searchHistoryForWeather[i]);
+        buttonEl.textContent = searchHistoryForWeather[i];
         weatherHistoryContainer.append(buttonEl);
-    });
+        
+    };
     
 };
 
@@ -164,9 +167,9 @@ function fetchCoordinates(search) {
     // c. fetch -> GET
 
     
-    const url = `${weatherAPIBaseURL}/geo/1.0/direct?q=${search}&appid=${weatherAPIKey}`  
+    const url = `${weatherAPIBaseURL}/geo/1.0/direct?q=${search}&appid=${weatherAPIKey}`; 
     fetch(url)
-        .then(function(response) {
+    .then(function(response) {
             // console.log(response.json())
             return response.json()
         // return JSON.parse(response);
