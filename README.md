@@ -4,4 +4,4 @@ To use this application, simply type in the name of the city or state you wish t
 
 https://ifylee.github.io/weather-channel/
 
-![A picture of my 5 day weather app](image-1.png)
+![A picture of my 5 day weather forecast](image.png)
