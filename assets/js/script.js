@@ -1,23 +1,27 @@
+// created the variables for easy reference
 let searchHistoryForWeather = [];
 const weatherAPIBaseURL = "https://api.openweathermap.org";
 const weatherAPIKey = "3191bbb5bba0d2fbfd147dad7dd75f0b";
 
+// declared my variables with their associated id as their selectors
 const searchForm = document.querySelector("#search-form");
 const searchInput = document.querySelector("#search-input");
 const todayContainer = document.querySelector("#today");
 const forecastContainer = document.querySelector("#forecast");
 const weatherHistoryContainer = document.querySelector("#weather-history");
 
-
+// Function to display the current weather for a given city using weather data.
 const displayCurrentWeather = (city, weatherData) => {
+    // uses dayjs library to get the current date and formats it also
     const date = dayjs().format("M/D/YYYY");
+    // these codes are extracting temperature, windspeed, humidity, icon and description from the weather API
     const tempF = weatherData.main.temp;
     const windMph = weatherData.wind.speed;
     const humidity = weatherData.main.humidity;
     const iconUrl = `https://openweathermap.org/img/w/${weatherData.weather[0].icon}.png`;
     const iconDescription = weatherData.weather[0].description || "No Description";
   
-
+// These sets up the structure of a weather card by creating several HTML elements intended to display weather information.
     const card = document.createElement("div");
     const cardBody = document.createElement("div");
     const heading = document.createElement("h3");
@@ -26,6 +30,7 @@ const displayCurrentWeather = (city, weatherData) => {
     const windElement = document.createElement("p");
     const humidityElement = document.createElement("p");
 
+//   Using bootstrap classes to set up a styled card container with nested body section, ready to be furnished with weather information and added to the DOM
     card.setAttribute("class", "card bg-light border-primary text-black mb-3");
     cardBody.setAttribute("class", "card-body");
     card.append(cardBody);
@@ -35,6 +40,7 @@ const displayCurrentWeather = (city, weatherData) => {
     windElement.setAttribute("class", "card-text");
     humidityElement.setAttribute("class", "card-text");
 
+    // These populates the HTML elements with content using the previously set classes and attributes and appends them to form a structured weather card.
     heading.textContent = `${city} (${date})`;
     weatherIcon.setAttribute("src", iconUrl);
     weatherIcon.setAttribute("alt", iconDescription);
@@ -44,12 +50,12 @@ const displayCurrentWeather = (city, weatherData) => {
     humidityElement.textContent = `Humidity: ${humidity} %`;
     cardBody.append(heading, temperatureElement, windElement, humidityElement);
 
-
+// this clears any existing content in the container and appends a newly created weather card to it.
     todayContainer.innerHTML = "";
     todayContainer.append(card);
-
 }
 
+// This function is extracting and preparing the weather forecast data to be used for creating an HTML card.
 const createForecastCard = (forecastData) => {
     const iconUrl = `https://openweathermap.org/img/w/${forecastData.weather[0].icon}.png`;
     const iconDescription = forecastData.weather[0].description || "No description";
