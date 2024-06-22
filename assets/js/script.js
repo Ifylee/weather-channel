@@ -26,7 +26,7 @@ const displayCurrentWeather = (city, weatherData) => {
     const windElement = document.createElement("p");
     const humidityElement = document.createElement("p");
 
-    card.setAttribute("class", "card bg-dark border-primary text-white mb-3");
+    card.setAttribute("class", "card bg-light border-primary text-black mb-3");
     cardBody.setAttribute("class", "card-body");
     card.append(cardBody);
 
@@ -72,7 +72,7 @@ const createForecastCard = (forecastData) => {
 
     column.setAttribute("class", "col-md");
     column.classList.add("five-day-card");
-    card.setAttribute("class", "card bg-primary text-white");
+    card.setAttribute("class", "card bg-dark text-white");
     cardBody.setAttribute("class", "card-body");
     cardTitle.setAttribute("class", "card-title");
     temperatureElement.setAttribute("class", "card-text");
