@@ -63,6 +63,7 @@ const createForecastCard = (forecastData) => {
     const wind = forecastData.wind.speed;
     const humidity = forecastData.main.humidity;
 
+    // creates new elements in memory but hasn't yet added them to the DOM. Will be used later to build the weather card structure.
     const column = document.createElement("div");
     const card = document.createElement("div");
     const cardBody = document.createElement("div");
@@ -72,10 +73,12 @@ const createForecastCard = (forecastData) => {
     const windElement = document.createElement("p");
     const humidityElement = document.createElement("p");
 
+    // appending the structure to create the card layout.
     column.append(card);
     card.append(cardBody);
     cardBody.append(cardTitle, weatherIcon, temperatureElement, windElement, humidityElement);
 
+    // setting attributes and classes for the previously created HTML elements using bootstrap classes
     column.setAttribute("class", "col-md");
     column.classList.add("five-day-card");
     card.setAttribute("class", "card bg-dark text-white");
@@ -85,6 +88,7 @@ const createForecastCard = (forecastData) => {
     windElement.setAttribute("class", "card-text");
     humidityElement.setAttribute("class", "card-text");
 
+    // It is dynamically updating the content and attributes of the element to display specific information on weather forecast data and appending it to the forecast container
     cardTitle.textContent = dayjs(forecastData.dt_txt).format("M/D/YYYY");
     weatherIcon.setAttribute("src", iconUrl);
     weatherIcon.setAttribute("alt", iconDescription);
@@ -95,7 +99,12 @@ const createForecastCard = (forecastData) => {
     forecastContainer.append(column);
 }
 
+// This function expression effectively sets up the structure and content for displaying a 5-day weather forecast.
+// It creates and appends a forecast card for this specific weather data item.
 const displayForecast = (weatherData) => {
+    // this calculates the unix timestamp for the start of the day.
+    // the  'dayjs().add(1, 'day')' adds one day to the current date and the `startOf('day)` sets the time of the start of that day.
+    // the `unix()` converts it to a unix timestamp.
     const startDate = dayjs().add(1, "day").startOf("day").unix();
     const endDate = dayjs().add(6, "day").startOf("day").unix(); 
 
@@ -105,20 +114,26 @@ const displayForecast = (weatherData) => {
     heading.textContent = "5-Day Forecast:";
     headingColumn.append(heading);
 
+// clears any existing content inside the forecastContainer.
     forecastContainer.innerHTML = "";
     forecastContainer.append(headingColumn);
 
+    // loops over each item in the weatherData array
     for(let i = 0; i < weatherData.length; i++) {
+        // checks if the unix timestamp `dt` of the current weatherData item is within the 5-day forecast period.
         if(weatherData[i].dt >= startDate && weatherData[i].dt < endDate ) {
+
+// Checks if the time part of the dt_txt string (which represents the forecast time) is 12:00 PM. This ensures the forecast is for midday, providing a steady time for the displayed forecasts.
             if(weatherData[i].dt_txt.slice(11,13)=== "12") {
 
-
+// calls the createForecastCard function with the current weatherData item as an argument.
              createForecastCard(weatherData[i]);   
             }
         }
     }
 }
 
+// this function retrieves weather data for a specified location and uses the retrieved data to update the weather display on the webpage.
 const fetchWeather = (location) => {
     const latitude = location.lat;
     const longitude = location.lon;
@@ -157,6 +172,7 @@ const fetchWeather = (location) => {
     
 };
 
+// this function takes care of the search history for weather queries.
 const appendWeatherHistory = (search) =>{
     if(searchHistoryForWeather.includes(search)) {
         return searchHistoryForWeather;
@@ -193,7 +209,9 @@ function fetchCoordinates(search) {
     });
 }
 
+// this function handles the search form submission
 const handleSearchFormSubmit = (event) => {
+    // prevents refreshing the page
     event.preventDefault();
     
     const search = searchInput.value.trim();
@@ -204,6 +222,7 @@ const handleSearchFormSubmit = (event) => {
     searchInput.value = "";
 }
 
+//this function initializes the search history for weather queries based on data previously saved in the local storage. 
 const initializeSearchHistory = () => {
     const storedWeatherHistory = JSON.parse(localStorage.getItem("weatherHistory"));
     if(storedWeatherHistory) {
@@ -212,6 +231,7 @@ const initializeSearchHistory = () => {
     createSearchHistory();
 };
 
+// This function lets users to click on previous search entries in a history list and retrieves the associated search query from the data search attribute of the clicked element.
 const handleSearchHistoryClick = (event) => {
     console.log(event.target)
     if (!event.target.matches(".history-button")) {
@@ -220,13 +240,16 @@ const handleSearchHistoryClick = (event) => {
     const buttonEl = event.target;
 
     const search = buttonEl.getAttribute("data-search");
+
     fetchCoordinates(search);
    
 
 };
 
+
 initializeSearchHistory();
 
+// event listeners
 searchForm.addEventListener("submit", handleSearchFormSubmit);
 
 weatherHistoryContainer.addEventListener("click", handleSearchHistoryClick);
